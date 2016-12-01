@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:id="@+id/activity_welcome"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    tools:context="com.myemcu.myshop.WelcomeActivity"
+    tools:ignore="UseCompoundDrawables">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/myshop"
+        tools:ignore="ContentDescription,ObsoleteLayoutParam"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="我的商城"
+        android:textSize="20sp"
+        android:textColor="#08c193"
+        tools:ignore="HardcodedText"/>
+
+</LinearLayout>

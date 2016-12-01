@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">我的商城</string>
+
+    <string name="rb_home">首页</string>
+    <string name="rb_type">分类</string>
+    <string name="rb_community">发现</string>
+    <string name="rb_cart">购物车</string>
+    <string name="rb_user">我的</string>
+
+</resources>
