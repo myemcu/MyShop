@@ -1,5 +1,6 @@
 package com.myemcu.myshop.app;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -23,7 +24,7 @@ import java.util.ArrayList;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends FragmentActivity {  // 1 去标题栏 2 支持getSupportFragmentManager()
 
     private ArrayList<BaseFragment> fragments;   // 声明BaseFragment集合对象fragments，用来装多个Fragment
     private int postion = 0;
@@ -47,12 +48,22 @@ public class MainActivity extends AppCompatActivity {
         initListener();             // 初始化页面控件监听
     }
 
+    // 5个Fragment页面(按顺序添加)
+    private void initFragment() {
+        fragments = new ArrayList<>();          // 新建集合对象
+        fragments.add(new HomeFragment());      // 添加   首页    Fragment
+        fragments.add(new TypeFragment());      // 添加   分类    Fragment
+        fragments.add(new CommunityFragment()); // 添加   社区    Fragment
+        fragments.add(new CartFragment());      // 添加   购物车  Fragment
+        fragments.add(new UserFragment());      // 添加   用户   Fragment
+    }
+
     private void initListener() {   // 首页中的各种监听
 
         rgMain.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(RadioGroup group, int i) {
-                switch (i) {
+            public void onCheckedChanged(RadioGroup group, int checkIid) {
+                switch (checkIid) {
                     case R.id.rb_home:      postion = 0;
                         break;
 
@@ -81,6 +92,17 @@ public class MainActivity extends AppCompatActivity {
         rgMain.check(R.id.rb_home); // 默认选中首页(用8.4.0的Butterknife这里要崩)
     }
 
+    // 根据位置，得到相应Fragment
+    private BaseFragment getFragment(int postion) {
+
+        if (fragments != null && fragments.size()>0) {
+            BaseFragment baseFragment = fragments.get(postion);
+            return baseFragment;
+        }else {
+            return null;
+        }
+    }
+
     // 根据上次preFragment与当前的Fragment进行切换
     private void switchFragment(Fragment preFragment, BaseFragment currentFragment) {
         if (tempFragment != currentFragment) {  // Fragment一样，就不需要处理了。
@@ -103,26 +125,5 @@ public class MainActivity extends AppCompatActivity {
             // 验证同一个地方只加载一次Fragment
             // Toast.makeText(MainActivity.this,"我进来了",Toast.LENGTH_SHORT).show();
         }
-    }
-
-    // 根据位置，得到相应Fragment
-    private BaseFragment getFragment(int postion) {
-
-        if (fragments != null && fragments.size()>0) {
-            BaseFragment baseFragment = fragments.get(postion);
-            return baseFragment;
-        }else {
-            return null;
-        }
-    }
-
-    // 5个Fragment页面(按顺序添加)
-    private void initFragment() {
-        fragments = new ArrayList<>();          // 新建集合对象
-        fragments.add(new HomeFragment());      // 添加   首页    Fragment
-        fragments.add(new TypeFragment());      // 添加   分类    Fragment
-        fragments.add(new CommunityFragment()); // 添加   社区    Fragment
-        fragments.add(new CartFragment());      // 添加   购物车  Fragment
-        fragments.add(new UserFragment());      // 添加   用户   Fragment
     }
 }
