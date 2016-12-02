@@ -1,11 +1,11 @@
-package com.myemcu.myshop;
+package com.myemcu.myshop.app;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Bundle;
 
-import com.myemcu.myshop.app.MainActivity;
+import com.myemcu.myshop.R;
 
 public class WelcomeActivity extends Activity {
 
