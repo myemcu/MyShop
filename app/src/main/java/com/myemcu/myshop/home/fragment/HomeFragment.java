@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSON;
 import com.myemcu.myshop.R;
 import com.myemcu.myshop.base.BaseFragment;
+import com.myemcu.myshop.home.adapter.HomeFragmentAdapter;
 import com.myemcu.myshop.home.bean.ResultBeanData;
 import com.myemcu.myshop.utils.Constants;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -34,6 +35,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     private TextView tv_search_home,tv_message_home;
 
     private ResultBeanData.ResultBean resultBean;   // 结果Bean
+    private HomeFragmentAdapter adapter;
 
     @Override
     public View initView() {
@@ -109,6 +111,13 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     private void processData(String json) {
         ResultBeanData resultBeanData = JSON.parseObject(json,ResultBeanData.class);    // 解析json到后边的类中
         resultBean = resultBeanData.getResult();
-        Log.e("TAG","解析成功=="+resultBean.getHot_info().get(0).getName());
+        //Log.e("TAG","解析成功=="+resultBean.getHot_info().get(0).getName());
+        if (resultBean != null) {
+            // 有数据，设置适配器
+            adapter = new HomeFragmentAdapter(context,resultBean);    // 传入上下文和数据
+            recy_home.setAdapter(adapter);
+        }else {
+
+        }
     }
 }
