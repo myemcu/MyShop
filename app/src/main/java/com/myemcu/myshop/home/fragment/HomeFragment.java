@@ -10,8 +10,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.myemcu.myshop.R;
 import com.myemcu.myshop.base.BaseFragment;
+import com.myemcu.myshop.home.bean.ResultBeanData;
 import com.myemcu.myshop.utils.Constants;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -30,6 +32,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     private ImageView iv_top;
 
     private TextView tv_search_home,tv_message_home;
+
+    private ResultBeanData.ResultBean resultBean;   // 结果Bean
 
     @Override
     public View initView() {
@@ -94,8 +98,17 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
                     @Override   // 联网成功回调它(response：请求成功的数据；id：区分 http(100) / https(101))
                     public void onResponse(String response, int id) {
+
                         Log.e("TAG","首页请求成功，数据为："+response);
+
+                        processData(response);  // 解析数据
                     }
                 });
+    }
+
+    private void processData(String json) {
+        ResultBeanData resultBeanData = JSON.parseObject(json,ResultBeanData.class);    // 解析json到后边的类中
+        resultBean = resultBeanData.getResult();
+        Log.e("TAG","解析成功=="+resultBean.getHot_info().get(0).getName());
     }
 }
