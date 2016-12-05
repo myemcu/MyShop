@@ -1,6 +1,7 @@
 package com.myemcu.myshop.home.fragment;
 
 import android.graphics.Color;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
@@ -113,9 +114,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         resultBean = resultBeanData.getResult();
         //Log.e("TAG","解析成功=="+resultBean.getHot_info().get(0).getName());
         if (resultBean != null) {
-            // 有数据，设置适配器
+            // 数据来了，设置RecyclerView适配器
             adapter = new HomeFragmentAdapter(context,resultBean);    // 传入上下文和数据
             recy_home.setAdapter(adapter);
+            recy_home.setLayoutManager(new GridLayoutManager(context,1));   // 1列
         }else {
 
         }

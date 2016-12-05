@@ -1,1 +1,1 @@
-include ':app', ':AnimDemo'
+include ':app', ':AnimDemo', ':banner_library'
