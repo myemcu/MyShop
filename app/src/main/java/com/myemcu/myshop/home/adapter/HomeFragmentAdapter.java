@@ -1,6 +1,7 @@
 package com.myemcu.myshop.home.adapter;
 
 import android.content.Context;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,8 @@ import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
 import com.youth.banner.listener.OnBannerClickListener;
 import com.youth.banner.listener.OnLoadImageListener;
+import com.zhy.magicviewpager.transformer.RotateDownPageTransformer;
+import com.zhy.magicviewpager.transformer.ScaleInTransformer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,10 +66,14 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
 
         if (viewType == BANNER) {   // 传入上下文、布局(itemview)
             return new BannerViewHolder(context, layoutInflater.inflate(R.layout.banner_viewpager,null));
-        }
+        }   // 换成自己的图片(1 新图片到服务器中)(2 png格式)(3 重启Tomcat)(4 清App应用数据)
 
         if (viewType == CHANNEL) {
             return new ChannelViewHolder(context,layoutInflater.inflate(R.layout.channel_item,null));
+        }
+
+        if (viewType == ACT) {
+            return new ActViewHolder(context,layoutInflater.inflate(R.layout.act_item,null));
         }
 
         return null;
@@ -84,11 +91,16 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
             ChannelViewHolder channelViewHolder = (ChannelViewHolder) holder;
             channelViewHolder.showData(resultBean.getChannel_info());
         }
+
+        if (getItemViewType(position) == ACT) {
+            ActViewHolder actViewHolder = (ActViewHolder) holder;
+            actViewHolder.showData(resultBean.getAct_info());
+        }
     }
 
     @Override   // 根据json可知，有6条item
     public int getItemCount() {
-        return 2;
+        return 3;
         //return 6; // 一条条做，最后才是这个，为6就是返回0~5
     }
 
@@ -185,6 +197,32 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
                     Toast.makeText(context,"你点击的是："+content,Toast.LENGTH_SHORT).show();
                 }
             });
+        }
+    }
+
+    // 活动ViewHolder实现类
+    private class ActViewHolder extends RecyclerView.ViewHolder {
+        private final Context context;
+        private ViewPager act_viewpager;
+
+        private ActAdapter adapter;
+
+        public ActViewHolder(Context context, View itemView) { // 要接收哪些就先到其itemView中去看有些神马
+            super(itemView);
+
+            this.context=context;
+            this.act_viewpager= (ViewPager) itemView.findViewById(R.id.act_viewpager);
+        }
+
+        public void showData(final List<ResultBeanData.ResultBean.ActInfoBean> act_info) {
+            // 数据已到位，设置适配器
+            adapter = new ActAdapter(context,act_info);
+            act_viewpager.setAdapter(adapter);
+            act_viewpager.setPadding(10,10,10,10);
+
+            // ViewPager第三方美化
+            act_viewpager.setOffscreenPageLimit(3); // >=3
+            act_viewpager.setPageTransformer(true, new RotateDownPageTransformer());    // 扇形
         }
     }
 }

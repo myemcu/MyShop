@@ -32,4 +32,5 @@ dependencies {
     compile 'com.alibaba:fastjson:1.1.55.android'
     compile project(':banner_library')
     compile files('libs/glide-3.7.0.jar')
+    compile 'com.zhy:magic-viewpager:1.0.1'
 }
