@@ -1,14 +1,20 @@
 package com.myemcu.myshop.home.adapter;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -23,8 +29,11 @@ import com.youth.banner.listener.OnLoadImageListener;
 import com.zhy.magicviewpager.transformer.RotateDownPageTransformer;
 import com.zhy.magicviewpager.transformer.ScaleInTransformer;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.SimpleFormatter;
 
 /**
  * Created by Administrator on 2016/12/3 0003.
@@ -45,6 +54,8 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
     private final static int HOT       =  5;    // 热卖
 
     private int currentType = BANNER;    // 定义当前条目的View类型(共6种)
+
+    private long time_dt = 0;   // 秒杀起始时间(ms)
 
     // 构造器接收
     private final Context context;
@@ -76,6 +87,10 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
             return new ActViewHolder(context,layoutInflater.inflate(R.layout.act_item,null));
         }
 
+        if (viewType == SECKILL) {
+            return new  SeckillViewHolder(context,layoutInflater.inflate(R.layout.seckill_item,null));
+        }
+
         return null;
     }
 
@@ -96,11 +111,16 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
             ActViewHolder actViewHolder = (ActViewHolder) holder;
             actViewHolder.showData(resultBean.getAct_info());
         }
+
+        if (getItemViewType(position) == SECKILL) {
+            SeckillViewHolder seckillViewHolder = (SeckillViewHolder) holder;
+            seckillViewHolder.showData(resultBean.getSeckill_info());
+        }
     }
 
     @Override   // 根据json可知，有6条item
     public int getItemCount() {
-        return 3;
+        return 4;
         //return 6; // 一条条做，最后才是这个，为6就是返回0~5
     }
 
@@ -223,6 +243,104 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
             // ViewPager第三方美化
             act_viewpager.setOffscreenPageLimit(3); // >=3
             act_viewpager.setPageTransformer(true, new RotateDownPageTransformer());    // 扇形
+        }
+    }
+
+    // 秒杀viewHolder
+    private class SeckillViewHolder extends RecyclerView.ViewHolder {
+
+        private final Context context;
+
+        private TextView tv_time_seckill,tv_more_seckill;
+        private RecyclerView rv_seckill;
+
+        private SeckillAdapter adapter;
+
+        private int hour,min,sec;
+        private String str_hour,str_min,str_sec;
+
+        // 更新每秒秒杀时间
+        private Handler handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+
+                time_dt-=1000;  // 递减1s
+
+                // 系统转换有错误，小时位总有个8
+                /*SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss"); // 总ms毫秒值格式转换
+                String time = format.format(new Date(time_dt));*/
+
+                sec= (int) (time_dt/1000);  // 总ms转总s
+
+                sec_to_hh_mm_ss();  // 总秒数转时分秒
+
+                tv_time_seckill.setText(str_hour+":"+str_min+":"+str_sec);
+
+                // 减后再发消息
+                handler.removeMessages(0);
+                handler.sendEmptyMessageDelayed(0,1000);    // 无标志，1s
+
+                if (time_dt <= 0 ) { // 秒杀结束
+                    handler.removeCallbacksAndMessages(null);
+                    Toast.makeText(context,"今日秒杀结束",Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
+
+        public SeckillViewHolder(Context context, View itemView) {
+            super(itemView);
+
+            this.context=context;
+
+            tv_time_seckill = (TextView) itemView.findViewById(R.id.tv_time_seckill);
+            tv_more_seckill = (TextView) itemView.findViewById(R.id.tv_more_seckill);
+            rv_seckill = (RecyclerView) itemView.findViewById(R.id.rv_seckill);
+
+        }
+
+        public void showData(final ResultBeanData.ResultBean.SeckillInfoBean seckill_info) {
+            // 文本和RecyclerView的适配器
+            adapter = new SeckillAdapter(context,seckill_info.getList());   // 只需传入集合
+            rv_seckill.setAdapter(adapter);
+            rv_seckill.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)); // 水平正序
+
+            // item点击事件
+            adapter.setOnSeckillRecyclerView(new SeckillAdapter.OnSeckillRecyclerView() {
+                @Override
+                public void onItemClick(int position, List<ResultBeanData.ResultBean.SeckillInfoBean.ListBean> seckill_infoList) {
+                    String content = seckill_info.getList().get(position).getName();
+                    Toast.makeText(context,content,Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            // 秒杀倒计时ms(范围由服务器上的起停实现来定)
+            time_dt=Integer.valueOf(seckill_info.getEnd_time()) - Integer.valueOf(seckill_info.getStart_time());
+            handler.sendEmptyMessageDelayed(0,1000);    // 无标志，1s
+        }
+
+        private void sec_to_hh_mm_ss() {
+            hour=sec/3600;
+            min=(sec-hour*3600)/60;
+            sec=(sec-hour*3600)%60;
+
+            if (hour<10) {
+                str_hour = "0"+hour+"";
+            }else {
+                str_hour = hour+"";
+            }
+
+            if (min<10) {
+                str_min = "0"+min+"";
+            }else {
+                str_min = min+"";
+            }
+
+            if (sec<10) {
+                str_sec = "0"+sec+"";
+            }else {
+                str_sec = sec+"";
+            }
         }
     }
 }
