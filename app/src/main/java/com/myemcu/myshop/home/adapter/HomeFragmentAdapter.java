@@ -39,11 +39,6 @@ import java.util.logging.SimpleFormatter;
  * Created by Administrator on 2016/12/3 0003.
  */
 
-
-/*
-* onCreateViewHolder()：创建不同条目的ViewHolder视图
-* */
-
 public class HomeFragmentAdapter extends RecyclerView.Adapter {
 
     private final static int BANNER    =  0;    // 横幅
@@ -95,6 +90,10 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
             return new RecommendViewHolder(context,layoutInflater.inflate(R.layout.recommend_item,null));
         }
 
+        if (viewType == HOT) {
+            return new HotViewHolder(context,layoutInflater.inflate(R.layout.hot_item,null));
+        }
+
         return null;
     }
 
@@ -125,11 +124,16 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
             RecommendViewHolder recommendViewHolder = (RecommendViewHolder) holder;
             recommendViewHolder.showData(resultBean.getRecommend_info());
         }
+
+        if (getItemViewType(position) == HOT) {
+            HotViewHolder hotViewholder = (HotViewHolder) holder;
+            hotViewholder.showData(resultBean.getHot_info());
+        }
     }
 
     @Override   // 根据json可知，有6条item
     public int getItemCount() {
-        return 5;
+        return 6;
         //return 6; // 一条条做，最后才是这个，为6就是返回0~5
     }
 
@@ -379,6 +383,36 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onItemClick(AdapterView<?> view, View view1, int position, long l) {
                     String content = recommend_info.get(position).getName();
+                    Toast.makeText(context,content,Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+    // HotViewHolder实现类
+    private class HotViewHolder extends RecyclerView.ViewHolder {
+
+        private final Context context;
+
+        private TextView tv_more_hot;
+        private GridView gv_hot;
+
+        public HotViewHolder(Context context, View itemView) {
+            super(itemView);
+
+            this.context=context;
+
+            tv_more_hot = (TextView) itemView.findViewById(R.id.tv_more_hot);
+            gv_hot = (GridView) itemView.findViewById(R.id.gv_hot);
+        }
+
+        public void showData(final List<ResultBeanData.ResultBean.HotInfoBean> hot_info) {
+            HotAdapter adapter = new HotAdapter(context,hot_info);
+            gv_hot.setAdapter(adapter);
+            gv_hot.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> view, View view1, int position, long l) {
+                    String content = hot_info.get(position).getName();
                     Toast.makeText(context,content,Toast.LENGTH_SHORT).show();
                 }
             });
