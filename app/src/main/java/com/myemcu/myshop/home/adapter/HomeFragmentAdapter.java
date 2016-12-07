@@ -49,7 +49,6 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
     private final static int HOT       =  5;    // 热卖
 
     private int currentType = BANNER;    // 定义当前条目的View类型(共6种)
-
     private long time_dt = 0;   // 秒杀起始时间(ms)
 
     // 构造器接收
@@ -133,8 +132,7 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
 
     @Override   // 根据json可知，有6条item
     public int getItemCount() {
-        return 6;
-        //return 6; // 一条条做，最后才是这个，为6就是返回0~5
+        return 6; //return 6; // 一条条做，最后才是这个，为6就是返回0~5
     }
 
     @Override // 获取条目的View类型(因为有6条)

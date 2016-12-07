@@ -114,12 +114,29 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         resultBean = resultBeanData.getResult();
         //Log.e("TAG","解析成功=="+resultBean.getHot_info().get(0).getName());
         if (resultBean != null) {
+
             // 数据来了，设置RecyclerView适配器
             adapter = new HomeFragmentAdapter(context,resultBean);    // 传入上下文和数据
             recy_home.setAdapter(adapter);
-            recy_home.setLayoutManager(new GridLayoutManager(context,1));   // 1列
-        }else {
 
+            GridLayoutManager manager = new GridLayoutManager(context, 1);
+            recy_home.setLayoutManager(manager);   // 1列
+
+            // 设置跨度大小的监听(GridView独有，Linearlayout无)
+            manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                @Override
+                public int getSpanSize(int position) {
+
+                    Log.e("TAGpos","position=="+position);
+
+                    if (position>=5) {
+                        iv_top.setVisibility(View.VISIBLE);
+                    }else {
+                        iv_top.setVisibility(View.GONE);
+                    }
+                    return 1;
+                }
+            });
         }
     }
 }
