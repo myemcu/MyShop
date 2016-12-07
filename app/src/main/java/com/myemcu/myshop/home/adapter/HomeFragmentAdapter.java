@@ -91,6 +91,10 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
             return new  SeckillViewHolder(context,layoutInflater.inflate(R.layout.seckill_item,null));
         }
 
+        if (viewType == RECOMMEND) {
+            return new RecommendViewHolder(context,layoutInflater.inflate(R.layout.recommend_item,null));
+        }
+
         return null;
     }
 
@@ -116,11 +120,16 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
             SeckillViewHolder seckillViewHolder = (SeckillViewHolder) holder;
             seckillViewHolder.showData(resultBean.getSeckill_info());
         }
+
+        if (getItemViewType(position) == RECOMMEND) {
+            RecommendViewHolder recommendViewHolder = (RecommendViewHolder) holder;
+            recommendViewHolder.showData(resultBean.getRecommend_info());
+        }
     }
 
     @Override   // 根据json可知，有6条item
     public int getItemCount() {
-        return 4;
+        return 5;
         //return 6; // 一条条做，最后才是这个，为6就是返回0~5
     }
 
@@ -341,6 +350,38 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
             }else {
                 str_sec = sec+"";
             }
+        }
+    }
+
+    // RecommendViewHolder实现类(频道中有Gridview)
+    private class RecommendViewHolder extends RecyclerView.ViewHolder {
+
+        private TextView tv_more_recommend;
+        private GridView gv_recommend;
+
+        private final Context context;
+
+        public RecommendViewHolder(Context context, View itemView) {
+            super(itemView);
+
+            this.context=context;
+
+            // 实例化itemView
+            tv_more_recommend = (TextView) itemView.findViewById(R.id.tv_more_recommend);
+            gv_recommend = (GridView) itemView.findViewById(R.id.gv_recommend);
+        }
+
+        public void showData(final List<ResultBeanData.ResultBean.RecommendInfoBean> recommend_info) {
+            // 数据已到，设置GridView适配器
+            RecommendAdapter adapter = new RecommendAdapter(context,recommend_info);// 传入上下文、数据
+            gv_recommend.setAdapter(adapter);
+            gv_recommend.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> view, View view1, int position, long l) {
+                    String content = recommend_info.get(position).getName();
+                    Toast.makeText(context,content,Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 }
