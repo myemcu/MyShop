@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_goods_info"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.myemcu.myshop.app.GoodsInfoActivity">
+
+    <!--标题栏-->
+    <!--分隔线 -->
+    <!--帧布局 -->
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="UselessParent">
+
+        <ImageButton
+            android:id="@+id/ib_good_info_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/top_bar_left_back"
+            tools:ignore="ContentDescription"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="商品详情"
+            android:textColor="#564c4c"
+            android:textSize="20sp"
+            tools:ignore="HardcodedText"/>
+
+        <ImageButton
+            android:id="@+id/ib_good_inxfo_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_gravity="center"
+            android:background="@drawable/icon_more"
+            tools:ignore="ContentDescription"/>
+
+    </LinearLayout>
+
+    <!-- 分隔线 -->
+
+    <!--<View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#66000000" />-->
+
+    <!-- 帧布局 -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="5dp"
+        tools:ignore="UselessLeaf">
+
+        <!--线性垂直布局-->
+        <!--线性水平布局-->
+        <!--包含更多布局-->
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!--里面放的是两个ScrollView-->
+
+            <com.myemcu.myshop.view.ScrollViewContainer
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <!--ScrollView1-->
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#fff"
+                        android:orientation="vertical"
+                        tools:ignore="ScrollViewSize">
+
+                        <ImageView
+                            android:id="@+id/iv_good_info_image"
+                            android:layout_width="match_parent"
+                            android:layout_height="260dp"
+                            android:layout_gravity="center_horizontal"
+                            tools:ignore="ContentDescription"/>
+
+                        <TextView
+                            android:id="@+id/tv_good_info_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:text="【预售】《来年就交给你啦》限量礼盒版"
+                            android:textColor="#323427"
+                            tools:ignore="HardcodedText,RtlHardcoded"/>
+
+                        <TextView
+                            android:id="@+id/tv_good_info_desc"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            android:text="      预售截止 10 月 15 日，预售期为限量礼盒版；预售截止 10 月 15 日，预售期为限量礼盒版；预售截止 10 月 15 日，预售期为限量礼盒版；重要的事情说3遍。"
+                            android:textColor="#767f86" tools:ignore="HardcodedText"/>
+
+                        <TextView
+                            android:id="@+id/tv_good_info_price"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            android:text="￥150.00"
+                            android:textColor="#ed3f3f"
+                            android:textSize="20sp" tools:ignore="HardcodedText"/>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_margin="10dp"
+                            android:background="#99000000" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="10dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="由"
+                                android:textColor="#3c3d40" tools:ignore="HardcodedText"/>
+
+                            <TextView
+                                android:id="@+id/tv_good_info_store"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="老婆大人"
+                                android:textColor="#ff4040" tools:ignore="HardcodedText"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="安排发货"
+                                android:textColor="#3c3d40" tools:ignore="HardcodedText"/>
+
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="8dp"
+                            android:background="#99000000" />
+
+                        <TextView
+                            android:id="@+id/tv_good_info_style"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableRight="@drawable/home_arrow_right"
+                            android:padding="10dp"
+                            android:text="请选择款式"
+                            android:textColor="#3c3d40" tools:ignore="HardcodedText,RtlHardcoded"/>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="8dp"
+                            android:background="#99000000" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            android:text="提示：普通商品享有质量问题 7 天退货，签收后 3 个工作日内可换货。其他特殊商品（如手办）的售后以页面说明为准（继续往下滑^.^）。"
+                            android:textColor="#3c3d40"
+                            tools:ignore="HardcodedText"/>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="8dp"
+                            android:background="#99000000" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:padding="10dp"
+                            android:text="图文详情"
+                            android:textColor="#3c3d40"
+                            android:textSize="15sp" tools:ignore="HardcodedText"/>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="#99000000" />
+
+                    </LinearLayout>
+
+                </ScrollView>
+
+                <!--ScrollView2-->
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <WebView
+                        android:id="@+id/wb_good_info_more"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        tools:ignore="ScrollViewSize"/>
+
+                </ScrollView>
+
+            </com.myemcu.myshop.view.ScrollViewContainer>
+
+        </LinearLayout>
+
+        <!--线性布局2-->
+
+        <LinearLayout
+            android:id="@+id/ll_goods_root"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="#fff">
+
+            <TextView
+                android:id="@+id/tv_good_info_callcenter"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawablePadding="5dp"
+                android:drawableTop="@drawable/icon_callserver_unpressed"
+                android:gravity="center"
+                android:padding="2dp"
+                android:text="联系客服"
+                android:textColor="#393b3e"
+                tools:ignore="HardcodedText"/>
+
+            <TextView
+                android:id="@+id/tv_good_info_collection"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawablePadding="5dp"
+                android:drawableTop="@drawable/good_uncollected"
+                android:gravity="center"
+                android:padding="2dp"
+                android:text="收藏"
+                android:textColor="#393b3e"
+                tools:ignore="HardcodedText"/>
+
+            <TextView
+                android:id="@+id/tv_good_info_cart"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawablePadding="5dp"
+                android:drawableTop="@drawable/icon_good_detail_cart"
+                android:gravity="center"
+                android:padding="2dp"
+                android:text="购物车"
+                android:textColor="#393b3e"
+                tools:ignore="HardcodedText"/>
+
+            <Button
+                android:id="@+id/btn_good_info_addcart"
+                android:layout_width="120dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/add_cart_bg_selector"
+                android:gravity="center"
+                android:text="加入购物车"
+                android:textColor="#fff"
+                android:textSize="20sp"
+                tools:ignore="HardcodedText,RtlHardcoded"/>
+        </LinearLayout>
+
+        <!-- 更多 -->
+
+        <include layout="@layout/more_layout"/>
+
+    </FrameLayout>
+
+</LinearLayout>

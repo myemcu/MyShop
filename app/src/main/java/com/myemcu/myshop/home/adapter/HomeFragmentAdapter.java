@@ -1,6 +1,7 @@
 package com.myemcu.myshop.home.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
@@ -19,6 +20,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.myemcu.myshop.R;
+import com.myemcu.myshop.app.GoodsInfoActivity;
+import com.myemcu.myshop.home.bean.GoodsBean;
 import com.myemcu.myshop.home.bean.ResultBeanData;
 import com.myemcu.myshop.utils.Constants;
 import com.youth.banner.Banner;
@@ -47,6 +50,8 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
     private final static int SECKILL   =  3;    // 秒杀
     private final static int RECOMMEND =  4;    // 推荐
     private final static int HOT       =  5;    // 热卖
+
+    private static final String GOODSBEAN = "goodsbean";    // Intent传值
 
     private int currentType = BANNER;    // 定义当前条目的View类型(共6种)
     private long time_dt = 0;   // 秒杀起始时间(ms)
@@ -186,6 +191,7 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
 
             banner.setBannerAnimation(Transformer.Accordion);       // 手风琴动画特效
             banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);   // 横幅加点指示
+
             banner.setImages(imagesUrl, new OnLoadImageListener() {
                 @Override
                 public void OnLoadImage(ImageView view, Object url) {
@@ -194,10 +200,12 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
                     Glide.with(context).load(Constants.BASE_URL_IMAGE + url).into(view);
                 }
             });
+
             banner.setOnBannerClickListener(new OnBannerClickListener() {   // Banner点击事件
                 @Override
                 public void OnBannerClick(int position) {
                     Toast.makeText(context,"你点了第"+position+"条横幅",Toast.LENGTH_SHORT).show();
+                //startGoodsInfoActivity();
                 }
             });
         }
@@ -322,6 +330,13 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
                 public void onItemClick(int position, List<ResultBeanData.ResultBean.SeckillInfoBean.ListBean> seckill_infoList) {
                     String content = seckill_info.getList().get(position).getName();
                     Toast.makeText(context,content,Toast.LENGTH_SHORT).show();
+
+                    GoodsBean goodsBean = new GoodsBean();  // “热卖”商品信息类
+                    goodsBean.setCover_price(seckill_infoList.get(position).getCover_price());
+                    goodsBean.setFigure(seckill_infoList.get(position).getFigure());
+                    goodsBean.setName(seckill_infoList.get(position).getName());
+                    goodsBean.setProduct_id(seckill_infoList.get(position).getProduct_id());
+                    startGoodsInfoActivity(goodsBean);
                 }
             });
 
@@ -382,6 +397,13 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
                 public void onItemClick(AdapterView<?> view, View view1, int position, long l) {
                     String content = recommend_info.get(position).getName();
                     Toast.makeText(context,content,Toast.LENGTH_SHORT).show();
+
+                    GoodsBean goodsBean = new GoodsBean();  // “热卖”商品信息类
+                    goodsBean.setCover_price(recommend_info.get(position).getCover_price());
+                    goodsBean.setFigure(recommend_info.get(position).getFigure());
+                    goodsBean.setName(recommend_info.get(position).getName());
+                    goodsBean.setProduct_id(recommend_info.get(position).getProduct_id());
+                    startGoodsInfoActivity(goodsBean);
                 }
             });
         }
@@ -407,13 +429,28 @@ public class HomeFragmentAdapter extends RecyclerView.Adapter {
         public void showData(final List<ResultBeanData.ResultBean.HotInfoBean> hot_info) {
             HotAdapter adapter = new HotAdapter(context,hot_info);
             gv_hot.setAdapter(adapter);
+
             gv_hot.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> view, View view1, int position, long l) {
                     String content = hot_info.get(position).getName();
                     Toast.makeText(context,content,Toast.LENGTH_SHORT).show();
+
+                    GoodsBean goodsBean = new GoodsBean();  // “热卖”商品信息类
+                    goodsBean.setCover_price(hot_info.get(position).getCover_price());
+                    goodsBean.setFigure(hot_info.get(position).getFigure());
+                    goodsBean.setName(hot_info.get(position).getName());
+                    goodsBean.setProduct_id(hot_info.get(position).getProduct_id());
+                    startGoodsInfoActivity(goodsBean);
                 }
             });
         }
+    }
+
+    // 启动商品详情信息列表页
+    private void startGoodsInfoActivity(GoodsBean goodsBean) {
+        Intent intent = new Intent(context, GoodsInfoActivity.class);
+        intent.putExtra(GOODSBEAN,goodsBean);
+        context.startActivity(intent);
     }
 }

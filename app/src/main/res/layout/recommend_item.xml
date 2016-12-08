@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:text="新品推荐"
-            android:textColor="#000"
+            android:textColor="@color/colorAccent"
             tools:ignore="HardcodedText,RtlHardcoded"/>
 
         <TextView

@@ -20,8 +20,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:text="今日闪购 距·结束"
-            android:textColor="#000"
+            android:text="今日秒杀"
+            android:textColor="@color/colorAccent"
             tools:ignore="HardcodedText,RtlHardcoded"/>
 
         <TextView

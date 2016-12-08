@@ -21,8 +21,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:text="这里都是买的棒棒哒"
-            android:textColor="#000" tools:ignore="HardcodedText,RtlHardcoded"/>
+            android:text="商城热卖"
+            android:textColor="@color/colorAccent"
+            tools:ignore="HardcodedText,RtlHardcoded"/>
 
         <TextView
             android:id="@+id/tv_more_hot"
