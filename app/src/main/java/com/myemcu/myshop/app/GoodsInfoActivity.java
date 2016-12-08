@@ -1,9 +1,13 @@
 package com.myemcu.myshop.app;
 
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -11,8 +15,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.myemcu.myshop.R;
 import com.myemcu.myshop.home.bean.GoodsBean;
+import com.myemcu.myshop.utils.Constants;
 
 import java.io.Serializable;
 
@@ -41,6 +47,63 @@ public class GoodsInfoActivity extends Activity implements View.OnClickListener 
     private Button btn_more;
 
     private GoodsBean goodsBean;
+
+    //----------------------------------------------------------------------------------------------
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_goods_info);
+
+        findViews();
+
+        // 接收HomeFragmentAdapter的Intent数据
+        goodsBean = (GoodsBean) getIntent().getSerializableExtra(GOODSBEAN);
+        if (goodsBean != null) {
+            // Toast.makeText(this, "goodsBean=="+goodsBean.toString(), Toast.LENGTH_SHORT).show();
+            showGoodsData(goodsBean);
+        }
+    }
+
+    private void showGoodsData(GoodsBean goodsBean) {
+        // 1 显示图片(iv_good_info_image)
+        Glide.with(this).load(Constants.BASE_URL_IMAGE+goodsBean.getFigure()).into(ivGoodInfoImage);// into到的是对象，不是Id
+        // 2 显示名称
+        tvGoodInfoName.setText("    "+goodsBean.getName()+"。");
+        // 3 设置价格
+        tvGoodInfoPrice.setText("￥"+goodsBean.getCover_price());
+        // 4 显示WebView
+        showWebView(goodsBean.getProduct_id());
+    }
+
+    private void showWebView(String product_id) {
+        if (product_id != null) {
+            wbGoodInfoMore.loadUrl("http://www.baidu.com");
+            // 设置JS支持
+            WebSettings webSettings = wbGoodInfoMore.getSettings();
+            webSettings.setJavaScriptEnabled(true);
+            webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+
+            wbGoodInfoMore.setWebViewClient(new WebViewClient() {
+
+                /*@Override   // 兼容低版本
+                public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                    view.loadUrl(url);
+                    return true;
+                }*/
+
+                @Override
+                public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        view.loadUrl(request.getUrl().toString());
+                    }
+                    return true;
+                }
+            });
+        }
+    }
+
+    //----------------------------------------------------------------------------------------------
 
     /**
      * Find the Views in the layout<br />
@@ -144,19 +207,5 @@ public class GoodsInfoActivity extends Activity implements View.OnClickListener 
             default:break;
         }
 
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_goods_info);
-
-        findViews();
-
-        // 接收HomeFragmentAdapter的Intent数据
-        goodsBean = (GoodsBean) getIntent().getSerializableExtra(GOODSBEAN);
-        if (goodsBean != null) {
-            Toast.makeText(this, "goodsBean=="+goodsBean.toString(), Toast.LENGTH_SHORT).show();
-        }
     }
 }

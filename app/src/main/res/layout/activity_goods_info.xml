@@ -95,6 +95,7 @@
                         <ImageView
                             android:id="@+id/iv_good_info_image"
                             android:layout_width="match_parent"
+                            android:layout_marginTop="8dp"
                             android:layout_height="260dp"
                             android:layout_gravity="center_horizontal"
                             tools:ignore="ContentDescription"/>
@@ -103,8 +104,9 @@
                             android:id="@+id/tv_good_info_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
-                            android:text="【预售】《来年就交给你啦》限量礼盒版"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginLeft="20dp"
+                            android:text="【预售】《来年就交给你啦》限量礼盒版。"
                             android:textColor="#323427"
                             tools:ignore="HardcodedText,RtlHardcoded"/>
 
