@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.myemcu.myshop.R;
+import com.myemcu.myshop.cart.utils.CartStorge;
 import com.myemcu.myshop.home.bean.GoodsBean;
 import com.myemcu.myshop.utils.Constants;
 
@@ -173,8 +174,6 @@ public class GoodsInfoActivity extends Activity implements View.OnClickListener 
                                             Toast.makeText(this, "更多", Toast.LENGTH_SHORT).show();
                                             break;
 
-
-
             case R.id.tv_good_info_callcenter:  // 联系客服
                                                 Toast.makeText(this, "联系客服", Toast.LENGTH_SHORT).show();
                                                 break;
@@ -188,7 +187,8 @@ public class GoodsInfoActivity extends Activity implements View.OnClickListener 
                                                 break;
 
             case R.id.btn_good_info_addcart:    // 添加购物车
-                                                Toast.makeText(this, "添加到购物车", Toast.LENGTH_SHORT).show();
+                                                CartStorge.getInstance().addData(goodsBean);    // getInstance()：读取本地数据转内存，addData()内存中进行数据的添加
+                                                Toast.makeText(this, "添加成功", Toast.LENGTH_SHORT).show();
                                                 break;
 
 

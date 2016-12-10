@@ -1,6 +1,7 @@
 package com.myemcu.myshop.app;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.log.LoggerInterceptor;
@@ -14,9 +15,18 @@ import okhttp3.OkHttpClient;
 
 // 作用：整个软件
 public class MyApplication extends Application {
+
+    private static Context context;
+
+    public static Context getContext() { // Getter()方法
+        return context;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
+
+        context=getApplicationContext();
 
         initOKHttpClient();
     }

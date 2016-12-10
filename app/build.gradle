@@ -33,4 +33,5 @@ dependencies {
     compile project(':banner_library')
     compile files('libs/glide-3.7.0.jar')
     compile 'com.zhy:magic-viewpager:1.0.1'
+    compile 'com.google.code.gson:gson:2.2.4'
 }

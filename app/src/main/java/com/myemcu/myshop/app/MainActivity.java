@@ -29,7 +29,7 @@ public class MainActivity extends FragmentActivity {  // 1 去标题栏 2 支持
     private ArrayList<BaseFragment> fragments;   // 声明BaseFragment集合对象fragments，用来装多个Fragment
     private int postion = 0;
 
-    private Fragment tempFragment;              // 临时Fragment(缓存Fragment)
+    private BaseFragment tempFragment;              // 临时Fragment(缓存Fragment)
     private BaseFragment currentFragment;       // 当前Fragment
 
     @Bind(R.id.frame_layout)

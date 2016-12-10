@@ -13,8 +13,19 @@ public class GoodsBean implements Serializable {
     // 热卖中的4个对象
     private String cover_price,figure,name,product_id; // 价格，图片路径，名称，产品Id
 
-    // 生成赋值取值方法(alt+Insert)
+    // 后面加的
+    private int number = 1; // 商品数量(最少要有一个)，记得重新tostring.
 
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
+    //----------------------------------------------------------------------------------------------
+
+    // 生成赋值取值方法(alt+Insert)
     public String getCover_price() {
         return cover_price;
     }
@@ -48,7 +59,6 @@ public class GoodsBean implements Serializable {
     }
 
     // toString()方法
-
     @Override
     public String toString() {
         return "GoodsBean{" +
@@ -56,6 +66,7 @@ public class GoodsBean implements Serializable {
                 ", figure='" + figure + '\'' +
                 ", name='" + name + '\'' +
                 ", product_id='" + product_id + '\'' +
+                ", number=" + number +
                 '}';
     }
 }

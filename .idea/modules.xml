@@ -2,9 +2,12 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/AndroidExamDemo/AndroidExamDemo.iml" filepath="$PROJECT_DIR$/AndroidExamDemo/AndroidExamDemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/AnimDemo/AnimDemo.iml" filepath="$PROJECT_DIR$/AnimDemo/AnimDemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/MyShop.iml" filepath="$PROJECT_DIR$/MyShop.iml" />
       <module fileurl="file://$PROJECT_DIR$/NavigationDrawDemo/NavigationDrawDemo.iml" filepath="$PROJECT_DIR$/NavigationDrawDemo/NavigationDrawDemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/RecyclerViewDemo/RecyclerViewDemo.iml" filepath="$PROJECT_DIR$/RecyclerViewDemo/RecyclerViewDemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/RecyclerViewDemo_Library/RecyclerViewDemo_Library.iml" filepath="$PROJECT_DIR$/RecyclerViewDemo_Library/RecyclerViewDemo_Library.iml" />
       <module fileurl="file://$PROJECT_DIR$/ScrollViewContainerDemo/ScrollViewContainerDemo.iml" filepath="$PROJECT_DIR$/ScrollViewContainerDemo/ScrollViewContainerDemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/banner_library/banner_library.iml" filepath="$PROJECT_DIR$/banner_library/banner_library.iml" />
