@@ -9,12 +9,7 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/AndroidExamDemo" />
-            <option value="$PROJECT_DIR$/AnimDemo" />
-            <option value="$PROJECT_DIR$/NavigationDrawDemo" />
-            <option value="$PROJECT_DIR$/RecyclerViewDemo" />
-            <option value="$PROJECT_DIR$/RecyclerViewDemo_Library" />
-            <option value="$PROJECT_DIR$/ScrollViewContainerDemo" />
+            <option value="$PROJECT_DIR$/AddSubView" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/banner_library" />
           </set>

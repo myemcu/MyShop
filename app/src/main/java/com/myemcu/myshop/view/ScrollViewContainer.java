@@ -19,9 +19,10 @@ import java.util.TimerTask;
  * @author chenjing
  * 
  */
+
+// 来自于第三方案例的拷贝，就只拷了这个
 public class ScrollViewContainer extends RelativeLayout
 {
-
 	/**
 	 * 自动上滑
 	 */

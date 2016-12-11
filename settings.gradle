@@ -1,2 +1,1 @@
-include ':app', ':AnimDemo', ':banner_library', ':NavigationDrawDemo', ':RecyclerViewDemo_Library', ':RecyclerViewDemo', ':AndroidExamDemo'
-include ':ScrollViewContainerDemo'
+include ':app', ':banner_library', ':AddSubView'

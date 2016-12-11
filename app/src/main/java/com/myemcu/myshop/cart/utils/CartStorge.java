@@ -38,9 +38,9 @@ public class CartStorge {
     private static final String JSON_CART = "json_cart";    // 字符串抽取(Ctrl+Alt+C)
     private SparseArray<GoodsBean> sparseArray; // SparseArray替代HashMap可使内存优化(Android特有，原生Java无)
 
-    // 创建自己的对象，即只有单个对象被创建
+    // 定义自身类对象，即单个对象
     private static CartStorge instance;
-    // 得到一个购物车的实例
+    // 得到一个该类的实例
     public static CartStorge getInstance() { // 静态方法，外部直调
 
         if (instance == null) {
@@ -51,6 +51,7 @@ public class CartStorge {
     }
 
     private final Context context;
+
     // 构造器(私有的，除了在该类中其他地方都不可以访问的)
     private CartStorge(Context context) {       // 让构造器为private，这样该类就不会被实例化
         this.context=context;                   // 接收全局上下文
@@ -91,7 +92,7 @@ public class CartStorge {
     // 数据增删改=====================================================================================
 
     // 增加数据
-    public void addData(GoodsBean goodsBean) {
+    public void  addData(GoodsBean goodsBean) {
         // 1 添加数据到内存中，即：sparseArray，若当前数据已存在，就修改成number递增
         GoodsBean tempData = sparseArray.get(Integer.parseInt(goodsBean.getProduct_id()));
 
