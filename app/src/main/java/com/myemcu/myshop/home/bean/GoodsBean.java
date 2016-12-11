@@ -23,6 +23,16 @@ public class GoodsBean implements Serializable {
     public void setNumber(int number) {
         this.number = number;
     }
+
+    private boolean isChecked = true;   // 选中状态，默认选中，然后Setter、Getter、重新toString
+
+    public boolean isChecked() {    // Getter
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {   // Setter
+        isChecked = checked;
+    }
     //----------------------------------------------------------------------------------------------
 
     // 生成赋值取值方法(alt+Insert)
@@ -59,6 +69,7 @@ public class GoodsBean implements Serializable {
     }
 
     // toString()方法
+
     @Override
     public String toString() {
         return "GoodsBean{" +
@@ -67,6 +78,7 @@ public class GoodsBean implements Serializable {
                 ", name='" + name + '\'' +
                 ", product_id='" + product_id + '\'' +
                 ", number=" + number +
+                ", isChecked=" + isChecked +
                 '}';
     }
 }
