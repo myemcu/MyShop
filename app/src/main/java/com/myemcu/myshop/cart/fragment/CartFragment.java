@@ -31,8 +31,8 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
     private TextView tvShopcartEdit;
     private RecyclerView rv_cart;
     private LinearLayout llCheckAll;
-    private CheckBox checkboxAll;
-    private TextView tvShopcartTotal;
+    private CheckBox check_box_all;
+    private TextView tv_price_total;
     private Button btnCheckOut;
     private LinearLayout llDelete;
     private CheckBox cbAll;
@@ -49,14 +49,28 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
 
     @Override
     public View initView() {
+        View view = View.inflate(context,R.layout.fragment_cart,null);  // 页面加载
+        findViews(view);                                                // 实例化控件
+        setOnClickListener();                                           // 事件监听
+        return view;                                                    // 返回view
+    }
 
-        View view = View.inflate(context,R.layout.fragment_cart,null);  // Fragment页面加载
+    private void setOnClickListener() {
+        btnCheckOut.setOnClickListener(this);
+        btnDelete.setOnClickListener(this);
+        btnCollection.setOnClickListener(this);
 
+        // 内容为空时的监听
+        iv_empty.setOnClickListener(this);
+        tv_empty_cart_tobuy.setOnClickListener(this);
+    }
+
+    private void findViews(View view) {
         tvShopcartEdit  =   (TextView)      view.findViewById( R.id.tv_shopcart_edit );
         rv_cart         =   (RecyclerView)  view.findViewById( R.id.rv_cart );
         llCheckAll      =   (LinearLayout)  view.findViewById( R.id.ll_check_all );
-        checkboxAll     =   (CheckBox)      view.findViewById( R.id.checkbox_all );
-        tvShopcartTotal =   (TextView)      view.findViewById( R.id.tv_shopcart_total );
+        check_box_all   =   (CheckBox)      view.findViewById( R.id.check_box_all );
+        tv_price_total  =   (TextView)      view.findViewById( R.id.tv_price_total );   // 总价
         btnCheckOut     =   (Button)        view.findViewById( R.id.btn_check_out );
         llDelete        =   (LinearLayout)  view.findViewById( R.id.ll_delete );
         cbAll           =   (CheckBox)      view.findViewById( R.id.cb_all );
@@ -67,15 +81,6 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
         ll_empty_shopcart = (LinearLayout) view.findViewById(R.id.ll_empty_shopcart);
         iv_empty = (ImageView) view.findViewById(R.id.iv_empty);
         tv_empty_cart_tobuy = (TextView) view.findViewById(R.id.tv_empty_cart_tobuy);
-
-        btnCheckOut.setOnClickListener(this);
-        btnDelete.setOnClickListener(this);
-        btnCollection.setOnClickListener(this);
-
-        iv_empty.setOnClickListener(this);
-        tv_empty_cart_tobuy.setOnClickListener(this);
-
-        return view;
     }
 
     @Override
@@ -87,7 +92,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
 
     private void showData() {
 
-        // 读取数据
+        // 1 读取数据
         List<GoodsBean> goodsBeanList = CartStorge.getInstance().getAllData();
 
         // 打印数据
@@ -95,10 +100,11 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
             Log.e("TAGList",goodsBeanList.get(i).toString());   // 得到列表中的每一项
         }*/
 
+        // 2
         if (goodsBeanList != null && goodsBeanList.size()>0) {
             // 有数据的情况(隐藏数据为空的布局)，设置Recvy适配器
             ll_empty_shopcart.setVisibility(View.GONE);
-            adapter = new CartAdapter(context,goodsBeanList);   // 传入上下文和数据
+            adapter = new CartAdapter(context,goodsBeanList,tv_price_total);   // 先传入上下文和数据，然后是总价
             rv_cart.setAdapter(adapter);
             // RecyclerView布局管理器(上下文、方向、数据正序)
             rv_cart.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false));
