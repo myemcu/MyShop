@@ -25,6 +25,7 @@
             android:id="@+id/iv_gov"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:layout_marginLeft="5dp"
             android:background="@drawable/new_img_loading_1"
             android:scaleType="fitXY"
             tools:ignore="ContentDescription"/>

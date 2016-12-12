@@ -10,8 +10,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.myemcu.myshop.R;
+import com.myemcu.myshop.cart.utils.CartStorge;
 import com.myemcu.myshop.cart.view.AddSubView;
 import com.myemcu.myshop.home.bean.GoodsBean;
+import com.myemcu.myshop.utils.CacheUtils;
 import com.myemcu.myshop.utils.Constants;
 
 import java.util.List;
@@ -86,11 +88,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         // 当item布局写完并在ViewHolder中实例化后就绑定数据
 
         // 1 根据位置得到对应的Bean对象
-        GoodsBean goodsBean = goodsBeanList.get(position);
+        final GoodsBean goodsBean = goodsBeanList.get(position);
 
         // 2 设置显示数据
         holder.cb_gov.setChecked(goodsBean.isChecked());                                                // 状态
@@ -100,6 +102,21 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
         // 3 设置从商品页传来的商品数量
         holder.addSubView_number.setValue(goodsBean.getNumber());                                       // 数量
+        holder.addSubView_number.setMin(1);
+        holder.addSubView_number.setMax(10000);
+        holder.addSubView_number.setOnAddSubValueListener(new AddSubView.OnAddSubValueListener() {
+            @Override
+            public void onAddSubValue(int value) {
+                // 1 更新列表中的商品数量
+                goodsBean.setNumber(value); // 设置商品Bean中的商品数量
+                // 2 更新列表到内存及本地
+                CartStorge.getInstance().updateData(goodsBean); // getInstance()单例方法
+                // 3 刷新适配器
+                notifyItemChanged(position);
+                // 4 再次计算总价
+                showTotalPrice();
+            }
+        });
     }
 
     @Override
