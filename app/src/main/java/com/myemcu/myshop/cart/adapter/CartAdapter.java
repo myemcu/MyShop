@@ -28,7 +28,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     private final List<GoodsBean> goodsBeanList;    // List<>集合中装的是商品Bean对象
     private final TextView tv_price_total;
 
-
     // 适配器的构造器
     public CartAdapter(Context context, List<GoodsBean> goodsBeanList, TextView tv_price_total) {
 
@@ -38,6 +37,24 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         this.tv_price_total=tv_price_total;
 
         showTotalPrice();   // 显示总价
+        setItemListener();  // Item设置监听
+    }
+
+    // Item监听
+    private void setItemListener() {
+        setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                // 1 根据位置找到对应的Bean对象
+                GoodsBean goodsBean = goodsBeanList.get(position);
+                // 2 设置CheckBox取反状态
+                goodsBean.setChecked(!goodsBean.isChecked());
+                // 3 刷新Item状态
+                notifyItemChanged(position);
+                // 4 重新计算总价
+                showTotalPrice();
+            }
+        });
     }
 
     // 显示商品总价
@@ -78,6 +95,16 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             tv_desc_gov = (TextView) itemView.findViewById(R.id.tv_desc_gov);
             tv_price_gov = (TextView) itemView.findViewById(R.id.tv_price_gov);
             addSubView_number = (AddSubView) itemView.findViewById(R.id.addSubView_number);
+
+            // 设置Item的点击事件
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (onItemClickListener != null) {  // 接口对象不为空
+                        onItemClickListener.onItemClick(getLayoutPosition());   // Item项的位置
+                    }
+                }
+            });
         }
     }
 
@@ -107,8 +134,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         holder.addSubView_number.setOnAddSubValueListener(new AddSubView.OnAddSubValueListener() {
             @Override
             public void onAddSubValue(int value) {
-                // 1 更新列表中的商品数量
-                goodsBean.setNumber(value); // 设置商品Bean中的商品数量
+                // 1 回调数量更新到商品列表
+                goodsBean.setNumber(value);
                 // 2 更新列表到内存及本地
                 CartStorge.getInstance().updateData(goodsBean); // getInstance()单例方法
                 // 3 刷新适配器
@@ -122,5 +149,16 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     @Override
     public int getItemCount() {
         return goodsBeanList.size();
+    }
+
+    // 又来定义RecyclerView点击事件的回调接口
+    public interface OnItemClickListener {
+        void onItemClick(int position); // 回传Item项的位置
+    }
+
+    private OnItemClickListener onItemClickListener;    // 接口对象
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {   // Setter方法
+        this.onItemClickListener = onItemClickListener;
     }
 }

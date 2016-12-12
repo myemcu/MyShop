@@ -108,6 +108,14 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
             rv_cart.setAdapter(adapter);
             // RecyclerView布局管理器(上下文、方向、数据正序)
             rv_cart.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false));
+            /*// 设置适配器监听
+            adapter.setOnItemClickListener(new CartAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(int position) {
+                    Toast.makeText(context,"点击项为："+position,Toast.LENGTH_SHORT).show();
+
+                }
+            });*/
         }else {
             // 无数据的情况(显示数据为空的布局)
             ll_empty_shopcart.setVisibility(View.VISIBLE);
