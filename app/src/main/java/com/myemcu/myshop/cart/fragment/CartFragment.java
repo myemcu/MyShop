@@ -28,7 +28,10 @@ import java.util.List;
 // 购物车Fragment
 public class CartFragment extends BaseFragment implements View.OnClickListener {
 
-    private TextView tvShopcartEdit;
+    private static final int STATUS_EDIT   = 1; // 编辑状态
+    private static final int STATUS_FINISH = 2; // 完成状态
+
+    private TextView tv_cart_edit;
     private RecyclerView rv_cart;
     private LinearLayout llCheckAll;
     private CheckBox check_box_all;
@@ -63,10 +66,14 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
         // 内容为空时的监听
         iv_empty.setOnClickListener(this);
         tv_empty_cart_tobuy.setOnClickListener(this);
+
+        // 设置默认监听状态
+        tv_cart_edit.setTag(STATUS_EDIT);
+        tv_cart_edit.setOnClickListener(this);
     }
 
     private void findViews(View view) {
-        tvShopcartEdit  =   (TextView)      view.findViewById( R.id.tv_shopcart_edit );
+        tv_cart_edit    =   (TextView)      view.findViewById( R.id.tv_cart_edit);      // 编辑
         rv_cart         =   (RecyclerView)  view.findViewById( R.id.rv_cart );
         llCheckAll      =   (LinearLayout)  view.findViewById( R.id.ll_check_all );
         check_box_all   =   (CheckBox)      view.findViewById( R.id.check_box_all );
@@ -108,14 +115,6 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
             rv_cart.setAdapter(adapter);
             // RecyclerView布局管理器(上下文、方向、数据正序)
             rv_cart.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false));
-            /*// 设置适配器监听
-            adapter.setOnItemClickListener(new CartAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(int position) {
-                    Toast.makeText(context,"点击项为："+position,Toast.LENGTH_SHORT).show();
-
-                }
-            });*/
         }else {
             // 无数据的情况(显示数据为空的布局)
             ll_empty_shopcart.setVisibility(View.VISIBLE);
@@ -146,7 +145,51 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                     Toast.makeText(context,"去逛逛",Toast.LENGTH_SHORT).show();
                     break;
 
+            case R.id.tv_cart_edit:
+                    int action = (int) tv_cart_edit.getTag();   // 获取状态
+                    if (action == STATUS_EDIT) {
+                        // 切换到完成状态
+                        showDelete();
+                    }else {
+                        // 切换为编辑状态
+                        hideDelete();
+                    }
+                    break;
+
             default:break;
         }
+    }
+
+    private void showDelete() {
+        // 1 设置状态为完成
+        tv_cart_edit.setTag(STATUS_FINISH);
+        tv_cart_edit.setText("完成");
+
+        // 2 变成非勾选
+        if (adapter != null) {
+            adapter.checkAll_none(false);   // 设置所有为非勾选
+        }
+        // 3 删除视图的显示
+        llDelete.setVisibility(View.VISIBLE);
+        // 4 结算视图的隐藏
+        llCheckAll.setVisibility(View.GONE);
+    }
+
+    private void hideDelete() {
+        // 1 设置状态为编辑
+        tv_cart_edit.setTag(STATUS_EDIT);
+        tv_cart_edit.setText("编辑");
+
+        // 2 变成勾选
+        if (adapter != null) {
+            adapter.checkAll_none(true);    // 设置所有为勾选
+        }
+        check_box_all.setChecked(true);     // 这也是
+        adapter.showTotalPrice();           // 同上
+
+        // 3 删除视图的隐藏
+        llDelete.setVisibility(View.GONE);
+        // 4 结算视图的显示
+        llCheckAll.setVisibility(View.VISIBLE);
     }
 }

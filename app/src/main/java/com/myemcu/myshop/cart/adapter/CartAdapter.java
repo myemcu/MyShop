@@ -41,6 +41,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         showTotalPrice();   // 显示总价
         setItemListener();  // Item设置监听
 
+        //checkAll();
         // 设置全选Check_Box的点击事件
         check_box_all.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,7 +57,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     }
 
     // 设置Item的全选和非全选
-    private void checkAll_none(boolean isChecked) {
+    public void checkAll_none(boolean isChecked) {  // public外部要用
         if (goodsBeanList != null && goodsBeanList.size()>0) {
             for (int i = 0; i < goodsBeanList.size(); i++) {
                 GoodsBean goodsBean = goodsBeanList.get(i); // 从列表中得到某一具体的商品Bean
@@ -106,7 +107,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     }
 
     // 显示商品总价
-    private void showTotalPrice() {
+    public void showTotalPrice() {  // public 外部要用
         tv_price_total.setText("合计金额："+getTotalPrice());
     }
 
