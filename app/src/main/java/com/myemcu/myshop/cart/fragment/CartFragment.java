@@ -104,7 +104,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
         if (goodsBeanList != null && goodsBeanList.size()>0) {
             // 有数据的情况(隐藏数据为空的布局)，设置Recvy适配器
             ll_empty_shopcart.setVisibility(View.GONE);
-            adapter = new CartAdapter(context,goodsBeanList,tv_price_total);   // 先传入上下文和数据，然后是总价
+            adapter = new CartAdapter(context,goodsBeanList,tv_price_total,check_box_all);   // 先传入上下文和数据，然后是总价
             rv_cart.setAdapter(adapter);
             // RecyclerView布局管理器(上下文、方向、数据正序)
             rv_cart.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false));

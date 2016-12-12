@@ -27,17 +27,43 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     private final Context context;
     private final List<GoodsBean> goodsBeanList;    // List<>集合中装的是商品Bean对象
     private final TextView tv_price_total;
+    private final CheckBox check_box_all;
 
     // 适配器的构造器
-    public CartAdapter(Context context, List<GoodsBean> goodsBeanList, TextView tv_price_total) {
+    public CartAdapter(Context context, List<GoodsBean> goodsBeanList, TextView tv_price_total, final CheckBox check_box_all) {
 
         this.context=context;
         this.goodsBeanList=goodsBeanList;
 
         this.tv_price_total=tv_price_total;
+        this.check_box_all=check_box_all;
 
         showTotalPrice();   // 显示总价
         setItemListener();  // Item设置监听
+
+        // 设置全选Check_Box的点击事件
+        check_box_all.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 1 得到全选Check_Box状态
+                boolean isChecked = check_box_all.isChecked();
+                // 2 根据状态设置全选与非全选
+                checkAll_none(isChecked);
+                // 3 计算商品总价
+                showTotalPrice();
+            }
+        });
+    }
+
+    // 设置Item的全选和非全选
+    private void checkAll_none(boolean isChecked) {
+        if (goodsBeanList != null && goodsBeanList.size()>0) {
+            for (int i = 0; i < goodsBeanList.size(); i++) {
+                GoodsBean goodsBean = goodsBeanList.get(i); // 从列表中得到某一具体的商品Bean
+                goodsBean.setChecked(isChecked);            // isChecked为true，则每一项为true，反之亦然
+                notifyItemChanged(i);
+            }
+        }
     }
 
     // Item监听
@@ -51,10 +77,32 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                 goodsBean.setChecked(!goodsBean.isChecked());
                 // 3 刷新Item状态
                 notifyItemChanged(position);
-                // 4 重新计算总价
+                // 4 校验是否全选
+                checkAll();
+                // 5 重新计算总价
                 showTotalPrice();
             }
         });
+    }
+
+    // Item项的全选校验
+    private void checkAll() {
+        if (goodsBeanList != null && goodsBeanList.size()>0) {
+            int cnt = 0;
+            for (int i = 0; i < goodsBeanList.size(); i++) {
+                GoodsBean goodsBean = goodsBeanList.get(i); // 从列表中得到某一具体的商品Bean
+                if (!goodsBean.isChecked()) {   // 只要有一个没选中
+                    // 设置非全选
+                    check_box_all.setChecked(false);
+                }else {
+                    cnt++;  // 选中的
+                }
+            }
+            if (cnt==goodsBeanList.size()) {
+                // 设置全选
+                check_box_all.setChecked(true);
+            }
+        }
     }
 
     // 显示商品总价
