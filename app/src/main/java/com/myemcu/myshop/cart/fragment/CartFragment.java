@@ -49,6 +49,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
     private TextView tv_empty_cart_tobuy;
 
     private CartAdapter adapter;
+    private List<GoodsBean> goodsBeanList;
 
     @Override
     public View initView() {
@@ -106,7 +107,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
     private void showData() {
 
         // 1 读取数据
-        List<GoodsBean> goodsBeanList = CartStorge.getInstance().getAllData();
+        goodsBeanList = CartStorge.getInstance().getAllData();
 
         // 打印数据
         /*for (int i = 0; i < goodsBeanList.size(); i++) {
@@ -117,7 +118,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
         if (goodsBeanList != null && goodsBeanList.size()>0) {
             // 有数据的情况(隐藏数据为空的布局)，设置Recvy适配器
             ll_empty_shopcart.setVisibility(View.GONE);
-            adapter = new CartAdapter(context,goodsBeanList,tv_price_total,check_box_all,cbAll);   // 先传入上下文和数据，然后是总价，编辑态、完成态CheckBox
+            adapter = new CartAdapter(context, goodsBeanList,tv_price_total,check_box_all,cbAll);   // 先传入上下文和数据，然后是总价，编辑态、完成态CheckBox
             rv_cart.setAdapter(adapter);
             // RecyclerView布局管理器(上下文、方向、数据正序)
             rv_cart.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false));
@@ -136,7 +137,10 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                     break;
 
             case R.id.btn_delete:
-                    Toast.makeText(context,"删除",Toast.LENGTH_SHORT).show();
+                    // 1 删除选中项
+                    adapter.deleteData();
+                    // 2 校验全选非全选
+                    adapter.checkAll();
                     break;
 
             case R.id.btn_collection:
@@ -155,9 +159,13 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                     int action = (int) tv_cart_edit.getTag();   // 获取状态
                     if (action == STATUS_EDIT) {
                         // 切换到完成状态
-                        showDelete();
+                        if (goodsBeanList!=null && goodsBeanList.size()>0) {
+                            showDelete();
+                        }else {
+                            Toast.makeText(context,"还是空的",Toast.LENGTH_SHORT).show();
+                        }
                     }else {
-                        // 切换为编辑状态
+                        // 返回编辑态
                         hideDelete();
                     }
                     break;
@@ -188,11 +196,12 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
         tv_cart_edit.setText("编辑");
 
         // 2 变成勾选
-        if (adapter != null) {
+        if (goodsBeanList != null && goodsBeanList.size()>0) {
             adapter.checkAll_none(true);    // 设置所有为勾选
             adapter.checkAll();
+            check_box_all.setChecked(true); // 这也是
         }
-        check_box_all.setChecked(true);     // 这也是
+
         adapter.showTotalPrice();           // 同上
 
         // 3 删除视图的隐藏

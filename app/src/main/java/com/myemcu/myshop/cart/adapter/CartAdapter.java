@@ -149,6 +149,26 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         return totalPrice;
     }
 
+    // 删除item项
+    public void deleteData() {
+        if (goodsBeanList != null && goodsBeanList.size()>0) {
+            for (int i = 0; i < goodsBeanList.size() ; i++) {
+                // 删除选中项
+                GoodsBean goodsBean = goodsBeanList.get(i);
+                if (goodsBean.isChecked()) {
+                    // 从List中移除
+                    goodsBeanList.remove(goodsBean);    // remove是List<>中的方法
+                    // 更新到本地
+                    CartStorge.getInstance().delData(goodsBean);
+                    // 刷新
+                    notifyItemRemoved(i);
+                    // 更新数量
+                    i--;
+                }
+            }
+        }
+    }
+
     // 因为,Item只有一种类型，所以先写ViewHolder
     public class ViewHolder extends RecyclerView.ViewHolder {   // 必须public
 
