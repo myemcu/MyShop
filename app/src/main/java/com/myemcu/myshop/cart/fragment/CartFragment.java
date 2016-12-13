@@ -101,7 +101,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
     public void initData() {
         super.initData();
 
-        showData(); // 数据的展现
+        //showData(); // 数据的展现放在了底部Fragment生命周期的恢复执行中了。
     }
 
     private void showData() {
@@ -114,19 +114,39 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
             Log.e("TAGList",goodsBeanList.get(i).toString());   // 得到列表中的每一项
         }*/
 
-        // 2
+        // 2 有数据的情况下
         if (goodsBeanList != null && goodsBeanList.size()>0) {
-            // 有数据的情况(隐藏数据为空的布局)，设置Recvy适配器
-            ll_empty_shopcart.setVisibility(View.GONE);
+
+            // 首先要设置成编辑态
+            tv_cart_edit.setTag(STATUS_EDIT);
+            tv_cart_edit.setText("编辑");
+
+            tv_cart_edit.setVisibility(View.VISIBLE);   // 显示编辑文本
+            llCheckAll.setVisibility(View.VISIBLE);     // 显示底部全选结算栏
+
+            // 有数据的情况(隐藏数据为空的布局)，设置Recy适配器
+            hideEmptyCart();
             adapter = new CartAdapter(context, goodsBeanList,tv_price_total,check_box_all,cbAll);   // 先传入上下文和数据，然后是总价，编辑态、完成态CheckBox
             rv_cart.setAdapter(adapter);
             // RecyclerView布局管理器(上下文、方向、数据正序)
             rv_cart.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false));
         }else {
             // 无数据的情况(显示数据为空的布局)
-            ll_empty_shopcart.setVisibility(View.VISIBLE);
+            showEmptyCart();
         }
     }
+
+    private void showEmptyCart() {
+        ll_empty_shopcart.setVisibility(View.VISIBLE);
+        tv_cart_edit.setVisibility(View.GONE);  // 隐藏编辑文本
+        llDelete.setVisibility(View.GONE);
+    }
+
+    private void hideEmptyCart() {
+        ll_empty_shopcart.setVisibility(View.GONE);
+    }
+
+
 
     @Override
     public void onClick(View v) {
@@ -141,6 +161,10 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                     adapter.deleteData();
                     // 2 校验全选非全选
                     adapter.checkAll();
+                    // 3 如果删干净了，就显示空购物车
+                    if (adapter.getItemCount()==0) {
+                        showEmptyCart();
+                    }
                     break;
 
             case R.id.btn_collection:
@@ -208,5 +232,12 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
         llDelete.setVisibility(View.GONE);
         // 4 结算视图的显示
         llCheckAll.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onResume() { // Fragment生命周期获取焦点的时候执行，这个解决的是每次要重新启动App才能在购物车页面中看到商品的Bug
+        super.onResume();
+
+        showData();
     }
 }
