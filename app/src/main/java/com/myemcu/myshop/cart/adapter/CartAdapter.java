@@ -24,25 +24,30 @@ import java.util.List;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
+    // 构造器成员
     private final Context context;
     private final List<GoodsBean> goodsBeanList;    // List<>集合中装的是商品Bean对象
-    private final TextView tv_price_total;
-    private final CheckBox check_box_all;
+    private final TextView tv_price_total;          // 总价
+    private final CheckBox check_box_all,cbAll;     // 编辑态、完成态
 
     // 适配器的构造器
-    public CartAdapter(Context context, List<GoodsBean> goodsBeanList, TextView tv_price_total, final CheckBox check_box_all) {
+    public CartAdapter(Context context, List<GoodsBean> goodsBeanList, TextView tv_price_total, final CheckBox check_box_all, final CheckBox cbAll) {
 
         this.context=context;
         this.goodsBeanList=goodsBeanList;
 
         this.tv_price_total=tv_price_total;
         this.check_box_all=check_box_all;
+        this.cbAll=cbAll;
 
-        showTotalPrice();   // 显示总价
-        setItemListener();  // Item设置监听
+        showTotalPrice();       // 显示总价
+        setItemListener();      // Item设置监听
 
-        //checkAll();
-        // 设置全选Check_Box的点击事件
+        checkAll_none(true);    // 初次进入购物车，保证列表项全选
+        checkAll();             // 校验列表项的全选
+        showTotalPrice();       // 初始计算总价
+
+        // 设置全选Check_Box的点击事件(编辑态)
         check_box_all.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -52,6 +57,17 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                 checkAll_none(isChecked);
                 // 3 计算商品总价
                 showTotalPrice();
+            }
+        });
+
+        // 设置全选Check_Box的点击事件(完成态)
+        cbAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 1 得到全选Check_Box状态
+                boolean isChecked = cbAll.isChecked();
+                // 2 根据状态设置全选与非全选
+                checkAll_none(isChecked);
             }
         });
     }
@@ -87,7 +103,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     }
 
     // Item项的全选校验
-    private void checkAll() {
+    public void checkAll() {    // public 在适配器外可调用
         if (goodsBeanList != null && goodsBeanList.size()>0) {
             int cnt = 0;
             for (int i = 0; i < goodsBeanList.size(); i++) {
@@ -95,6 +111,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                 if (!goodsBean.isChecked()) {   // 只要有一个没选中
                     // 设置非全选
                     check_box_all.setChecked(false);
+                    cbAll.setChecked(false);
                 }else {
                     cnt++;  // 选中的
                 }
@@ -102,7 +119,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             if (cnt==goodsBeanList.size()) {
                 // 设置全选
                 check_box_all.setChecked(true);
+                cbAll.setChecked(true);
             }
+        }else {
+            check_box_all.setChecked(false);
+            cbAll.setChecked(false);
         }
     }
 

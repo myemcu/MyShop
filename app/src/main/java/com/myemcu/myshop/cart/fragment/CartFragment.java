@@ -73,21 +73,27 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
     }
 
     private void findViews(View view) {
-        tv_cart_edit    =   (TextView)      view.findViewById( R.id.tv_cart_edit);      // 编辑
-        rv_cart         =   (RecyclerView)  view.findViewById( R.id.rv_cart );
-        llCheckAll      =   (LinearLayout)  view.findViewById( R.id.ll_check_all );
-        check_box_all   =   (CheckBox)      view.findViewById( R.id.check_box_all );
-        tv_price_total  =   (TextView)      view.findViewById( R.id.tv_price_total );   // 总价
-        btnCheckOut     =   (Button)        view.findViewById( R.id.btn_check_out );
-        llDelete        =   (LinearLayout)  view.findViewById( R.id.ll_delete );
-        cbAll           =   (CheckBox)      view.findViewById( R.id.cb_all );
-        btnDelete       =   (Button)        view.findViewById( R.id.btn_delete );
-        btnCollection   =   (Button)        view.findViewById( R.id.btn_collection );
 
-        // 内容为空时的布局
-        ll_empty_shopcart = (LinearLayout) view.findViewById(R.id.ll_empty_shopcart);
-        iv_empty = (ImageView) view.findViewById(R.id.iv_empty);
-        tv_empty_cart_tobuy = (TextView) view.findViewById(R.id.tv_empty_cart_tobuy);
+        // 公共控件
+        tv_cart_edit    =   (TextView)      view.findViewById( R.id.tv_cart_edit);      // 编辑/完成切换
+        rv_cart         =   (RecyclerView)  view.findViewById( R.id.rv_cart );          // RecyclerView列表
+
+        // 编辑态控件
+        llCheckAll      =   (LinearLayout)  view.findViewById( R.id.ll_check_all );     // 编辑态布局
+        check_box_all   =   (CheckBox)      view.findViewById( R.id.check_box_all );    // 全选CheckBox
+        tv_price_total  =   (TextView)      view.findViewById( R.id.tv_price_total );   // 总价
+        btnCheckOut     =   (Button)        view.findViewById( R.id.btn_check_out );    // 去结算
+
+        // 完成态控件
+        llDelete        =   (LinearLayout)  view.findViewById( R.id.ll_delete );        // 完成态布局
+        cbAll           =   (CheckBox)      view.findViewById( R.id.cb_all );           // 全选CheckBox
+        btnDelete       =   (Button)        view.findViewById( R.id.btn_delete );       // 删除键
+        btnCollection   =   (Button)        view.findViewById( R.id.btn_collection );   // 收藏键
+
+        // 内容为空时的控件
+        ll_empty_shopcart = (LinearLayout) view.findViewById(R.id.ll_empty_shopcart);   // 内容空时的布局
+        iv_empty = (ImageView) view.findViewById(R.id.iv_empty);                        // 图片
+        tv_empty_cart_tobuy = (TextView) view.findViewById(R.id.tv_empty_cart_tobuy);   // 文本
     }
 
     @Override
@@ -111,7 +117,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
         if (goodsBeanList != null && goodsBeanList.size()>0) {
             // 有数据的情况(隐藏数据为空的布局)，设置Recvy适配器
             ll_empty_shopcart.setVisibility(View.GONE);
-            adapter = new CartAdapter(context,goodsBeanList,tv_price_total,check_box_all);   // 先传入上下文和数据，然后是总价
+            adapter = new CartAdapter(context,goodsBeanList,tv_price_total,check_box_all,cbAll);   // 先传入上下文和数据，然后是总价，编辑态、完成态CheckBox
             rv_cart.setAdapter(adapter);
             // RecyclerView布局管理器(上下文、方向、数据正序)
             rv_cart.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false));
@@ -168,6 +174,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
         // 2 变成非勾选
         if (adapter != null) {
             adapter.checkAll_none(false);   // 设置所有为非勾选
+            adapter.checkAll();
         }
         // 3 删除视图的显示
         llDelete.setVisibility(View.VISIBLE);
@@ -183,6 +190,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
         // 2 变成勾选
         if (adapter != null) {
             adapter.checkAll_none(true);    // 设置所有为勾选
+            adapter.checkAll();
         }
         check_box_all.setChecked(true);     // 这也是
         adapter.showTotalPrice();           // 同上
